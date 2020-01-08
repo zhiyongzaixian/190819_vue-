@@ -1,8 +1,6 @@
 <template>
   <div id="appContainer">
-    <h1>App 组件</h1>
-    <div class="noAdaptive">没有适配</div>
-    <div class="haveAdaptive">有适配的</div>
+    <router-view></router-view>
   </div>
 
 </template>
@@ -16,13 +14,4 @@ export default {
 </script>
 
 <style lang="stylus">
-  #appContainer
-    .noAdaptive
-      width 750px
-      height 100px
-      background red
-    .haveAdaptive
-      width 10rem
-      height 100px
-      background green
 </style>
