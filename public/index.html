@@ -3,12 +3,43 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--viewport适配: 布局视口 = 视觉视口-->
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="stylesheet" href="./reset.css">
     <title>gshop_study</title>
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script type="text/javascript">
+      function remRefresh() {
+        // 1. 获取屏幕的宽度
+        let clientWidth = document.documentElement.clientWidth;
+
+        // 2. 将屏幕的宽度等分, 等分的目的： 降低单位rem值的大小，便于换算，提高精确度
+        let rem = clientWidth / 10;
+
+        // 3. 设置根节点字体的大小
+        document.documentElement.style.fontSize = rem + 'px'
+
+        // 4. 设置body字体大小
+        document.body.style.fontSize = '16px'
+      }
+
+
+      window.addEventListener('pageshow', () => {
+        remRefresh()
+      })
+      let timeoutId;
+      window.addEventListener('resize', () => {
+        timeoutId && clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          console.log('resize');
+          remRefresh()
+        }, 2000)
+      })
+
+    </script>
   </body>
 </html>
