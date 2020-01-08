@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.4.4",
+    "lib-flexible": "^0.3.2",
+    "postcss-px2rem": "^0.3.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.10"
