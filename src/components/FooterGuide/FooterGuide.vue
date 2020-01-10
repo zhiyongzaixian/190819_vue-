@@ -34,7 +34,8 @@
         *   2. $route 是路由对象，里边包含当前路径下所有路由信息(path， params， meta， query)
         * */
 
-        this.$router.push(path)
+        path !== this.$route.path && this.$router.push(path)
+
       }
     }
   }
