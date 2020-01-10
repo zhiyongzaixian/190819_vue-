@@ -79,5 +79,23 @@
    1. 生成路由器: const router = new VueRouter()
    2. 安装路由器: new Vue(router)
    3. 管理路由: new VueRouter({[{path: '路由路径', component: '路由组件'}]})
-   4. 请求路由: 1) router-link to='路由路径'， 2) $router
+   4. 请求路由: 1) router-link to='路由路径'， 2) $router.路由方法
    5. 显示路由组件: router-view
+
+# 4. Vuex
+
+1. 核心概念：
+
+   1. store对象
+
+      1. state
+
+      2. mutations
+
+      3. actions
+
+      4. getters
+
+      5. dispatch
+
+         
