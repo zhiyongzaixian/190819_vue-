@@ -11,6 +11,7 @@
     "axios": "^0.19.1",
     "core-js": "^3.4.4",
     "lib-flexible": "^0.3.2",
+    "lodash": "^4.17.15",
     "postcss-px2rem": "^0.3.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",

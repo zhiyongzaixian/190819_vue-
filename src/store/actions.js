@@ -1,10 +1,12 @@
 
 import {
-  getAddress
+  getAddress,
+  getCategorys
 } from '../api'
 
 import {
-  SAVE_ADDRESS
+  SAVE_ADDRESS,
+  SAVE_CATEGORYS
 } from './mutations-type'
 
 
@@ -17,5 +19,9 @@ export default {
     
     !!(result.code === 0) && commit(SAVE_ADDRESS, result.data)
   
+  },
+  async getCategorysAction({commit}){
+    let result = await getCategorys()
+    !!(result.code === 0) && commit(SAVE_CATEGORYS, result.data)
   }
 }
