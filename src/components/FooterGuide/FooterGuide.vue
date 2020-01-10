@@ -51,6 +51,7 @@
     width 100%
     height 50px
     box-sizing border-box
+    background #fff
     .guideItem
       width 25%
       height 50px

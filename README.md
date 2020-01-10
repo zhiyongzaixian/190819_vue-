@@ -76,8 +76,8 @@
 # 3. 路由
 
 1. 核心概念
-   1. 生成路由器
-   2. 安装路由器
-   3. 管理路由
-   4. 请求路由
+   1. 生成路由器: const router = new VueRouter()
+   2. 安装路由器: new Vue(router)
+   3. 管理路由: new VueRouter({[{path: '路由路径', component: '路由组件'}]})
+   4. 请求路由: 1) router-link to='路由路径'， 2) $router
    5. 显示路由组件: router-view
