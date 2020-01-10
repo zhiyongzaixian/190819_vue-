@@ -12,7 +12,7 @@
         <!--<span class="header_login_text">登录|注册</span>-->
       <!--</span>-->
     <!--</header>-->
-    <GshopHeader :title="'昌平区北七家宏福科技园(337省道北)'">
+    <GshopHeader :title="address.name?address.name:'定位中...'">
       <!--<span slot="left" class="header_search">-->
         <!--<i class="iconfont icon-sousuo"></i>-->
       <!--</span>-->
@@ -331,7 +331,22 @@
 </template>
 
 <script>
-  export default {}
+  import {mapState} from 'vuex'
+  import {getAddress} from '../../api'
+  export default {
+    async mounted(){
+      // let result = await getAddress(40.10038,116.36867)
+      // console.log(result)
+      // this.$store.commit('save_address')
+      this.$store.dispatch('getAddressAction')
+    },
+    computed: {
+      // ...mapState(['address']) 不能自定义映射的key值
+      ...mapState({
+        address: state => state.address
+      })
+    }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
