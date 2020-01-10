@@ -10,3 +10,13 @@ export const getAddress = (latitude, longitude) => ajax({
 export const getCategorys = () => ajax({
   url: '/index_category'
 })
+
+
+/*  根据经纬度获取商铺列表 */
+export const getShopList = (latitude, longitude) => ajax({
+  url: '/shops',
+  params: {
+    latitude,
+    longitude
+  }
+})
