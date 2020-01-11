@@ -17,7 +17,7 @@
               <!-- rightPhoneNumber 为true的时候导致前边的条件为fals，导致后边的条件失效-->
               <!--:disabled="!rightPhoneNumber && countDownTime === 0"-->
               <button
-                  @click.prevent="sendCode"
+                  @click.prevent="getCode"
                   :disabled="!rightPhoneNumber || countDownTime > 0"
                   class="get_verification "
                   :class="{rightPhone: rightPhoneNumber}"
@@ -69,10 +69,11 @@
 </template>
 
 <script>
+  import {sendCode} from '../../api'
   export default {
     data(){
       return {
-        isUserNameLogin: true, // 是否是用户名登录，默认为false
+        isUserNameLogin: false, // 是否是用户名登录，默认为false
         isShowPwd: false, // 默认不显示
         phone: '', // 手机号,
         countDownTime: 0
@@ -82,7 +83,7 @@
       toggleCaptcha(){
         this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
       },
-      sendCode(){
+      async getCode(){
         // 重置倒计时的时间
         this.countDownTime = 5
         // 开启倒计时
@@ -90,6 +91,15 @@
           this.countDownTime--
           this.countDownTime === 0 && clearInterval(intervalId)
         }, 1000)
+
+        // 发送请求请求后台给手机发送验证码
+        let result = await this.$API.sendCode({phone: this.phone})
+        console.log(result);
+        if(result.code === 0){
+          alert('短信已发送')
+        }else {
+          alert(result.msg)
+        }
       },
       async login(){
         // 1. 前端验证

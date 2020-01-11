@@ -22,3 +22,11 @@ export const getShopList = (latitude, longitude) => ajax({
 })
 
 
+/*  发送短信验证码  */
+export const sendCode = ({phone}) => ajax({
+  url: '/sendcode',
+  params: {
+    phone
+  }
+})
+
