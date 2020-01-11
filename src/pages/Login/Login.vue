@@ -4,16 +4,23 @@
       <div class="login_header">
         <h2 class="login_logo">硅谷外卖</h2>
         <div class="login_header_title">
-          <a href="javascript:;" class="on">短信登录</a>
-          <a href="javascript:;">密码登录</a>
+          <a href="javascript:;" @click="isUserNameLogin=false" :class="{on: !isUserNameLogin}">短信登录</a>
+          <a href="javascript:;" @click="isUserNameLogin=true"  :class="{on: isUserNameLogin}">密码登录</a>
         </div>
       </div>
       <div class="login_content">
         <form>
-          <div class="on">
+          <div :class="{on: !isUserNameLogin}">
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机号">
-              <button disabled="disabled" class="get_verification">获取验证码</button>
+              <input v-model="phone" type="tel" maxlength="11" placeholder="手机号">
+              <!-- rightPhoneNumber 为true的时候导致前边的条件为fals，导致后边的条件失效-->
+              <!--:disabled="!rightPhoneNumber && countDownTime === 0"-->
+              <button
+                  @click.prevent="sendCode"
+                  :disabled="!rightPhoneNumber || countDownTime > 0"
+                  class="get_verification "
+                  :class="{rightPhone: rightPhoneNumber}"
+              >{{countDownTime?`${countDownTime}s后可以重新获取`:'获取验证码'}}</button>
             </section>
             <section class="login_verification">
               <input type="tel" maxlength="8" placeholder="验证码">
@@ -23,21 +30,21 @@
               <a href="javascript:;">《用户服务协议》</a>
             </section>
           </div>
-          <div>
+          <div :class="{on: isUserNameLogin}">
             <section>
               <section class="login_message">
                 <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
               </section>
               <section class="login_verification">
-                <input type="tel" maxlength="8" placeholder="密码">
-                <div class="switch_button off">
-                  <div class="switch_circle"></div>
-                  <span class="switch_text">...</span>
+                <input :type="isShowPwd?'tel':'password'" maxlength="8" placeholder="密码">
+                <div class="switch_button " :class="isShowPwd?'on':'off'" @click="isShowPwd=!isShowPwd">
+                  <div class="switch_circle " :class="{right: isShowPwd}"></div>
+                  <span class="switch_text">{{isShowPwd?'abc':'...'}}</span>
                 </div>
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码">
-                <img class="get_verification" src="../../common/images/captcha.svg" alt="captcha">
+                <img ref="captcha" @click="toggleCaptcha" class="get_verification" src="http://localhost:4000/captcha" alt="captcha">
               </section>
             </section>
           </div>
@@ -53,7 +60,35 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    data(){
+      return {
+        isUserNameLogin: false, // 是否是用户名登录，默认为false
+        isShowPwd: false, // 默认不显示
+        phone: '', // 手机号,
+        countDownTime: 0
+      }
+    },
+    methods: {
+      toggleCaptcha(){
+        this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
+      },
+      sendCode(){
+        // 重置倒计时的时间
+        this.countDownTime = 5
+        // 开启倒计时
+        let intervalId = setInterval(() => {
+          this.countDownTime--
+          this.countDownTime === 0 && clearInterval(intervalId)
+        }, 1000)
+      }
+    },
+    computed: {
+      rightPhoneNumber(){
+        return /^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)
+      }
+    }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -116,6 +151,8 @@
                 color #ccc
                 font-size 14px
                 background transparent
+                &.rightPhone
+                  color #333
             .login_verification
               position relative
               margin-top 16px
@@ -144,7 +181,7 @@
                 &.on
                   background #02a774
                 >.switch_circle
-                  //transform translateX(27px)
+                  // transform translateX(27px)
                   position absolute
                   top -1px
                   left -1px
@@ -155,6 +192,8 @@
                   background #fff
                   box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
                   transition transform .3s
+                  &.right
+                    transform translateX(27px)
             .login_hint
               margin-top 12px
               color #999
