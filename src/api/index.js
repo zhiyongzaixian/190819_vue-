@@ -20,3 +20,5 @@ export const getShopList = (latitude, longitude) => ajax({
     longitude
   }
 })
+
+

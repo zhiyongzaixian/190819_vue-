@@ -88,14 +88,26 @@
 
    1. store对象
 
-      1. state
-
+      1. state： 多个组件共享的数据，用于集中管理
       2. mutations
-
+         1. mutation本质是函数
+         2. mutation作用: 修改state的状态数据
+         3. mutation特性： 只能处理同步数据，处理不了异步数据
       3. actions
-
+         1. action本质是函数
+         2. action作用: 1) 获取异步数据 2) 调用mutation同时将异步数据交给mutation
+         3. 调用mutation： commit('mutation的函数名', 交给mutation的异步数据)
       4. getters
-
+         1. getter本质：函数
+         2. getter作用： 同Vue的computed一样，依赖于原数据(state数据)进行计算得到新的数据
       5. dispatch
+         1. dispatch本质： 函数
+         2. dispatch作用： 调用action
 
-         
+   2. 组件同Vuex交互
+
+      1. mapState, 语法： computed
+         1. ...mapState(['映射的状态数据key'])， 不能动态定义映射的key值
+         2. ...mapState({key: state => state.key})
+
+      
