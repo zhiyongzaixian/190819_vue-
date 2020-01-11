@@ -30,3 +30,25 @@ export const sendCode = ({phone}) => ajax({
   }
 })
 
+
+/* 用户名密码登陆 */
+export const loginWithUserName = ({username, pwd, captcha}) => ajax({
+  url: '/login_pwd',
+  method: 'POST',
+  data: {
+    name: username,
+    pwd,
+    captcha
+  }
+})
+
+
+/* 手机号验证码登陆 */
+export const loginWithPhone = ({phone, code}) => ajax({
+  url: '/login_sms',
+  method: 'POST',
+  data: {
+    phone,
+    code
+  }
+})

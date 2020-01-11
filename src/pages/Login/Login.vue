@@ -10,6 +10,8 @@
       </div>
       <div class="login_content">
         <form>
+          <!-- 手机号登录 -->
+
           <div :class="{on: !isUserNameLogin}">
             <section class="login_message">
               <input name="phone" v-validate="'required|phone'" v-model="phone" type="tel" maxlength="11" placeholder="手机号">
@@ -24,7 +26,7 @@
               >{{countDownTime?`${countDownTime}s后可以重新获取`:'获取验证码'}}</button>
             </section>
             <section class="login_verification">
-              <input name="code" v-validate="'required|code'" type="tel" maxlength="8" placeholder="验证码">
+              <input v-model="code" name="code" v-validate="'required|code'" type="tel" maxlength="8" placeholder="验证码">
               <span style="color: red;" v-show="errors.has('code')">{{ errors.first('code') }}</span>
 
             </section>
@@ -33,15 +35,17 @@
               <a href="javascript:;">《用户服务协议》</a>
             </section>
           </div>
+          <!-- 用户名登录 -->
+
           <div :class="{on: isUserNameLogin}">
             <section>
               <section class="login_message">
-                <input name="username" v-validate="'required'" type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input v-model="username" name="username" v-validate="'required'" type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
                 <span style="color: red;" v-show="errors.has('username')">{{ errors.first('username') }}</span>
 
               </section>
               <section class="login_verification">
-                <input name="pwd" v-validate="'required'" :type="isShowPwd?'tel':'password'" maxlength="8" placeholder="密码">
+                <input v-model="pwd" name="pwd" v-validate="'required'" :type="isShowPwd?'tel':'password'" maxlength="8" placeholder="密码">
                 <span style="color: red;" v-show="errors.has('pwd')">{{ errors.first('pwd') }}</span>
 
                 <div class="switch_button " :class="isShowPwd?'on':'off'" @click="isShowPwd=!isShowPwd">
@@ -50,7 +54,7 @@
                 </div>
               </section>
               <section class="login_message">
-                <input name="captcha" v-validate="'required'" type="text" maxlength="11" placeholder="验证码">
+                <input v-model="captcha" name="captcha" v-validate="'required'" type="text" maxlength="11" placeholder="验证码">
                 <span style="color: red;" v-show="errors.has('captcha')">{{ errors.first('captcha') }}</span>
 
                 <img ref="captcha" @click="toggleCaptcha" class="get_verification" src="http://localhost:4000/captcha" alt="captcha">
@@ -76,7 +80,11 @@
         isUserNameLogin: false, // 是否是用户名登录，默认为false
         isShowPwd: false, // 默认不显示
         phone: '', // 手机号,
-        countDownTime: 0
+        countDownTime: 0,
+        code: '',
+        username: '',
+        pwd: '',
+        captcha: ''
       }
     },
     methods: {
@@ -103,11 +111,42 @@
       },
       async login(){
         // 1. 前端验证
-        let {isUserNameLogin} = this
+        let {isUserNameLogin, phone, code, username, pwd, captcha} = this
         let names = isUserNameLogin?['username', 'pwd', 'captcha']:['phone', 'code']
         const success = await this.$validator.validateAll(names) // 对所有表单项进行验证
         if(success){ // 前端验证成功
           // 2. 后端验证
+          // 1) 收集表单相的数据
+          // 2) 发送请求了
+          // 判断用户登陆的方式
+          let result
+          if(isUserNameLogin){ // 用户名/密码登录
+            result = await this.$API.loginWithUserName({username, pwd, captcha})
+            if(result.code === 1){
+              alert('请输入正确的用户名/密码/验证码')
+              // 更换验证码
+              this.toggleCaptcha()
+              // 清空之前的验证码
+              this.captcha = ''
+            }
+          }else { // 手机号/验证码登录
+            result = await this.$API.loginWithPhone({phone, code})
+            console.log('--------------------', result);
+            if(result.code === 1){
+              alert('请输入正确的验证码')
+              this.code = ''
+            }
+          }
+
+          // 统一处理登录的情况
+          if(result.code === 0){
+            // 登录成功
+            // 跳转页面
+            alert('登录成功')
+            this.$router.replace('/profile')
+            // 将用户数据保存至Vuex中
+            this.$store.dispatch('getUserInfoAction', result.data)
+          }
         }else {// 前端验证失败
           alert('前端验证失败')
         }
