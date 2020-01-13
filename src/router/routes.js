@@ -3,6 +3,7 @@ import Search from '../pages/Search/Search'
 import Order from '../pages/Order/Order'
 import Profile from '../pages/Profile/Profile'
 import Login from '../pages/Login/Login'
+import Shop from '../pages/Shop/Shop'
 
 
 
@@ -42,6 +43,10 @@ export default [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/shop',
+    component: Shop
   },
   {
     path: '/',
