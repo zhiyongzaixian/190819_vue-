@@ -94,11 +94,17 @@
         </div>
       </a>
     </section>
+    <section class="profile_my_order border-1px">
+      <!--<button @click="logout">退出登录</button>-->
+      <mt-button @click="logout" style="width: 100%" type="danger">退出登录</mt-button>
+    </section>
   </section>
 </template>
 
 <script>
+  import {MessageBox} from 'mint-ui'
   import {mapState} from 'vuex'
+  import {LOGOUT} from '../../store/mutations-type'
   export default {
     methods:{
       toLogin(){
@@ -106,6 +112,18 @@
 
         // !!!this.user._id && this.$router.replace('/login')
         !!this.user._id || this.$router.replace('/login')
+      },
+      // 退出登录方法
+      logout(){
+        // if(confirm('确认退出吗')){
+        //   this.$store.commit(LOGOUT)
+        // }
+
+        MessageBox.confirm('确认退出吗')
+          .then(
+            actionAgree => this.$store.commit(LOGOUT),
+            actionReject => console.log('取消退出'),
+          )
       }
     },
     computed: {

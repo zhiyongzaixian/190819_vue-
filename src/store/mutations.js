@@ -4,7 +4,8 @@ import {
   SAVE_CATEGORYS,
   SAVE_SHOPLIST,
   SAVE_USER,
-  SAVE_TOKEN
+  SAVE_TOKEN,
+  LOGOUT
 } from './mutations-type'
 
 
@@ -28,5 +29,12 @@ export default {
   },
   [SAVE_TOKEN] (state, token) {
     state.token = token
+  },
+  [LOGOUT] (state) {
+    // 情况了vuex中的用户信息
+    state.user = {}
+    state.token = ''
+    // 情况localStorage中的token
+    localStorage.removeItem('token_key')
   }
 }

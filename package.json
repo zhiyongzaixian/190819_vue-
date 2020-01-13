@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "axios": "^0.19.1",
+    "babel-plugin-component": "^1.1.1",
     "core-js": "^3.4.4",
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.15",
+    "mint-ui": "^2.2.13",
     "postcss-px2rem": "^0.3.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
