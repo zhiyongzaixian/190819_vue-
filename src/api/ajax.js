@@ -16,11 +16,15 @@ instance.interceptors.request.use(config => {
   
   // 3) 携带token的方式： 1. cookie 2. 请求参数 3. 请求头[authorization]
   let token = localStorage.getItem('token_key')
-  if(token){
-    config.headers.authorization = token
-  }else{// 没有token的情况， 没有必要自动登录
-    throw Error('请先登录')
+  // 判断当前的请求是否需要携带token
+  if(config.headers.needToken){
+    if(token){
+      config.headers.authorization = token
+    }else{// 没有token的情况， 没有必要自动登录
+      throw Error('请先登录')
+    }
   }
+ 
   return config
 })
 
@@ -33,6 +37,7 @@ instance.interceptors.response.use(
     if(!error.response){// 请求没有真正发出去，在请求拦截器报的错
       alert(error.message)
       // 跳转至登录页
+      // router.currentRoute代表是当前的路由信息对象
       if(router.currentRoute.path !== '/login'){
         router.replace('/login')
       }
