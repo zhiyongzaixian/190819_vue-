@@ -6,6 +6,10 @@ import Login from '../pages/Login/Login'
 import Shop from '../pages/Shop/Shop'
 
 
+import Good from '../pages/Shop/Good/Good'
+import Rating from '../pages/Shop/Rating/Rating'
+import Info from '../pages/Shop/Info/Info'
+
 
 export default [
   // {
@@ -46,7 +50,25 @@ export default [
   },
   {
     path: '/shop',
-    component: Shop
+    component: Shop,
+    children: [
+      {
+        path: '/shop/good',
+        component: Good
+      },
+      {
+        path: 'rating',
+        component: Rating
+      },
+      {
+        path: 'info',
+        component: Info
+      },
+      {
+        path: '/shop',
+        redirect: '/shop/good'
+      }
+    ]
   },
   {
     path: '/',

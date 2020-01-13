@@ -15,9 +15,9 @@ instance.interceptors.request.use(config => {
   config.data = qs.stringify(config.data) // json对象格式 ---> url-encoding形式
   
   // 3) 携带token的方式： 1. cookie 2. 请求参数 3. 请求头[authorization]
-  let token = localStorage.getItem('token_key')
   // 判断当前的请求是否需要携带token
   if(config.headers.needToken){
+    let token = localStorage.getItem('token_key')
     if(token){
       config.headers.authorization = token
     }else{// 没有token的情况， 没有必要自动登录
