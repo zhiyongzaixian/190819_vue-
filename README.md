@@ -109,5 +109,5 @@
       1. mapState, 语法： computed
          1. ...mapState(['映射的状态数据key'])， 不能动态定义映射的key值
          2. ...mapState({key: state => state.key})
-
-      
+2. 常见问题
+   1. 刷新Vuex数据丢失
