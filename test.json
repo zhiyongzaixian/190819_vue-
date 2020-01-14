@@ -1,0 +1,29 @@
+{
+  "provinces": [
+    {
+      "name": "河北省",
+      "id": 2
+    }
+  ],
+  "cities": [
+    {
+      "name": "邯郸市",
+      "parentId": 2,
+      "id": 256
+    },
+    {
+      "name": "石家庄市",
+      "parentId": 2
+    },
+    {
+      "name": "青岛市",
+      "parentId": 13
+    }
+  ],
+  "counties": [
+    {
+      "name": "邯郸市下边的县",
+      "parentId": 256
+    }
+  ]
+}

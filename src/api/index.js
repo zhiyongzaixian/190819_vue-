@@ -46,7 +46,7 @@ export const loginWithUserName = ({username, pwd, captcha}) => ajax({
     pwd,
     captcha
   },
-  header: {
+  headers: {
     needToken: false
   }
 })
@@ -72,4 +72,14 @@ export const autoLogin = () => ajax({
   // params: {
   //   token: 'xxx'
   // }
+})
+
+
+/* 测试mock接口 */
+export const test = () => ajax('/test2')
+
+
+//商家数据接口
+export const getShopDatas = () => ajax({
+  url: '/getShopDatas'
 })

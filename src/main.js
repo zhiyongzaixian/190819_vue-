@@ -3,6 +3,7 @@ import 'lib-flexible/flexible'
 import './veeValidate'
 import {Button} from 'mint-ui'
 // import 'mint-ui/lib/style.css'
+import './mock/mockServer'
 
 import * as API from './api'
 import router from './router'
