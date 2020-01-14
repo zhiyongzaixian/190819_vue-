@@ -1,8 +1,8 @@
 <template>
-  <div id="goodContainer">
-    <div class="leftContainer">
+  <div id="goodContainer" >
+    <div class="leftContainer" >
       <ul class="navList" ref="leftUl">
-        <li :class="{active: navIndex === index}" v-for="(good, index) in goods" :key="index">
+        <li @click="changeNavIndex(index)" :class="{active: navIndex === index}" v-for="(good, index) in goods" :key="index">
           {{good.name}}
         </li>
 
@@ -11,6 +11,8 @@
     <div class="rightContainer">
       <div class="foods-wrapper">
         <ul ref="rightUl">
+          <p>{{a.c}}</p>
+
           <li  class="food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -29,7 +31,7 @@
                     <span class="now">￥{{food.price}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    CartControl组件
+                    <CartControl :food="food"/>
                   </div>
                 </div>
               </li>
@@ -45,11 +47,18 @@
 <script>
   import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
+  import CartControl from '../../../components/CartControl/CartControl'
   export default {
+    components: {
+      CartControl
+    },
     data(){
       return {
         tops: [], // 用于放置每个点距离当前滑动顶部的高度
         scrollY: 0, // 页面滚动的距离
+        a:{
+          b: 0
+        }
       }
     },
     async mounted(){
@@ -57,6 +66,17 @@
         this._initScroll()
         this._initTops()
       }
+
+      // 说明非响应式属性, 组件实例初始化的时候没有当前数据
+      // this.count = 1
+      // this.a.c = 1
+      // this.$set(this.a, 'c', 1)
+      // setInterval(() => {
+      //   // console.log(this.count);
+      //   // this.count++
+      //   this.a.c++
+      // }, 1000)
+
     },
     computed: {
       ...mapState({
@@ -80,12 +100,14 @@
       _initScroll(){
         this.leftScroll = new BScroll('.leftContainer', {
           scrollY: true, // 纵向滑动
+          click: true, // 允许点击
         })
         this.rightScroll = new BScroll('.rightContainer', {
           scrollY: true, // 纵向滑动
           // probeType: 1, // 非实时
           probeType: 2, // 实时, 惯性滑动不计算
           // probeType: 3, // 实时, 惯性滑动计算
+          click: true, // 允许点击
         })
 
 
@@ -127,6 +149,14 @@
 
         // 只渲染一次，提高性能
         this.tops = tops
+      },
+      changeNavIndex(index){
+        console.log('xxxxxx');
+        console.log(event);
+        // this.navIndex = index NO setter
+        this.scrollY = this.tops[index]
+        // 右侧区域滑动到对应的位置
+        this.rightScroll.scrollTo(0, -this.scrollY, 1000)
       }
     },
     watch: {
