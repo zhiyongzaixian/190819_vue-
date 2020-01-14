@@ -2,117 +2,31 @@
   <div id="goodContainer">
     <div class="leftContainer">
       <ul class="navList">
-        <li>
-          爽口凉菜
+        <li v-for="(good, index) in goods" :key="index">
+          {{good.name}}
         </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
-        <li>
-          爽口凉菜
-        </li>
+
       </ul>
     </div>
     <div class="rightContainer">
       <div class="foods-wrapper">
         <ul>
-          <li class="food-list-hook">
-            <h1 class="title">折扣</h1>
+          <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
+            <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px">
+              <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" :key="index">
                 <div class="icon">
                   <img width="57" height="57"
-                       src="http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/114/h/114">
+                       :src="food.image">
                 </div>
                 <div class="content">
-                  <h2 class="name">南瓜粥</h2>
-                  <p class="desc">甜粥</p>
+                  <h2 class="name">{{food.name}}</h2>
+                  <p class="desc">{{food.description}}</p>
                   <div class="extra">
-                    <span class="count">月售91份</span>
-                    <span>好评率100%</span></div>
+                    <span class="count">月售{{food.sellCount}}份</span>
+                    <span>好评率{{food.rating}}%</span></div>
                   <div class="price">
-                    <span class="now">￥9</span>
-                  </div>
-                  <div class="cartcontrol-wrapper">
-                    CartControl组件
-                  </div>
-                </div>
-              </li>
-              <li class="food-item bottom-border-1px">
-                <div class="icon">
-                  <img width="57" height="57"
-                       src="http://fuss10.elemecdn.com/d/22/260bd78ee6ac6051136c5447fe307jpeg.jpeg?imageView2/1/w/114/h/114">
-                </div>
-                <div class="content">
-                  <h2 class="name">红豆薏米美肤粥</h2>
-                  <p class="desc">甜粥</p>
-                  <div class="extra">
-                    <span class="count">月售86份</span>
-                    <span>好评率100%</span>
-                  </div>
-                  <div class="price">
-                    <span class="now">￥12</span>
-                  </div>
-                  <div class="cartcontrol-wrapper">
-                    CartControl组件
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li class="food-list food-list-hook">
-            <h1 class="title">香浓甜粥</h1>
-            <ul>
-              <li class="food-item bottom-border-1px">
-                <div class="icon">
-                  <img width="57" height="57" src="http://fuss10.elemecdn.com/6/72/cb844f0bb60c502c6d5c05e0bddf5jpeg.jpeg?imageView2/1/w/114/h/114">
-                </div>
-                <div class="content">
-                  <h2 class="name">红枣山药粥</h2>
-                  <p class="desc">红枣山药糙米粥,素材包</p>
-                  <div class="extra">
-                    <span class="count">月售17份</span>
-                    <span>好评率100%</span>
-                  </div>
-                  <div class="price">
-                    <span class="now">￥29</span>
-                    <span class="old">￥36</span>
+                    <span class="now">￥{{food.price}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
                     CartControl组件
@@ -129,17 +43,45 @@
 </template>
 
 <script>
-
+  import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
   export default {
+    data(){
+      return {
+        test: 'xxx'
+      }
+    },
     async mounted(){
-      new BScroll('.leftContainer', {
-        scrollY: true, // 纵向滑动
+      console.log(this.goods);
+      // let result = await this.$API.getShopDatas()
+      // console.log(result);
+      if(this.goods){
+        this._initScroll()
+      }
+    },
+    computed: {
+      ...mapState({
+        goods: state => state.shop.shopDatas.goods
       })
-
-
-      let result = await this.$API.getShopDatas()
-      console.log(result);
+    },
+    methods: {
+      _initScroll(){
+        new BScroll('.leftContainer', {
+          scrollY: true, // 纵向滑动
+        })
+        new BScroll('.rightContainer', {
+          scrollY: true, // 纵向滑动
+        })
+      }
+    },
+    watch: {
+      goods(){
+        console.log(this.goods);
+        // this.$nextTick组件下一次渲染完毕
+        this.$nextTick(() => {
+          this._initScroll()
+        })
+      }
     }
   }
 </script>
@@ -149,15 +91,13 @@
   #goodContainer
     display flex
     overflow hidden
+    height calc(100vh - 224px)
+
     .leftContainer
       width 80px
       background #f3f5f7
       /* calc可以动态计算高度，宽度*/
-      height calc(100vh - 224px)
       /* vh, vw 视口单位 1vh=1%视口高度 */
-
-
-
       /*position absolute*/
       /*bottom 0*/
       /*top 224px*/
