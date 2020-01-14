@@ -10,8 +10,8 @@
     </div>
     <div class="rightContainer">
       <div class="foods-wrapper">
-        <ul>
-          <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
+        <ul ref="rightUl">
+          <li  class="food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
               <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" :key="index">
@@ -48,15 +48,13 @@
   export default {
     data(){
       return {
-        test: 'xxx'
+        tops: [], // 用于放置每个点距离当前滑动顶部的高度
       }
     },
     async mounted(){
-      console.log(this.goods);
-      // let result = await this.$API.getShopDatas()
-      // console.log(result);
       if(this.goods){
         this._initScroll()
+        this._initTops()
       }
     },
     computed: {
@@ -72,6 +70,33 @@
         new BScroll('.rightContainer', {
           scrollY: true, // 纵向滑动
         })
+      },
+      // 动态计算所有li高度累加
+      _initTops(){
+        let lis = Array.from(this.$refs.rightUl.children)
+        let tops = []
+        let top = 0
+        tops.push(top)
+        // for (var i = 0; i < lis.length; i++) {
+        //   top += lis[i].clientHeight;
+        //   tops.push(top)
+        // }
+        // this.tops = tops
+
+        // let arr = [1,2,3,4,5]
+        // arr.reduce((pre, next) => {
+        //   console.log(pre, next);
+        //   pre = pre + next
+        //   return pre
+        // }, 0)
+
+        lis.reduce((pre, liItem) => {
+          pre += liItem.clientHeight
+          tops.push(pre)
+          return pre
+        }, top)
+
+        this.tops = tops
       }
     },
     watch: {
@@ -80,6 +105,7 @@
         // this.$nextTick组件下一次渲染完毕
         this.$nextTick(() => {
           this._initScroll()
+          this._initTops()
         })
       }
     }
