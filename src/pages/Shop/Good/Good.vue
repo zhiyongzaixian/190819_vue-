@@ -1,8 +1,8 @@
 <template>
   <div id="goodContainer">
     <div class="leftContainer">
-      <ul class="navList">
-        <li v-for="(good, index) in goods" :key="index">
+      <ul class="navList" ref="leftUl">
+        <li :class="{active: navIndex === index}" v-for="(good, index) in goods" :key="index">
           {{good.name}}
         </li>
 
@@ -49,6 +49,7 @@
     data(){
       return {
         tops: [], // 用于放置每个点距离当前滑动顶部的高度
+        scrollY: 0, // 页面滚动的距离
       }
     },
     async mounted(){
@@ -60,23 +61,51 @@
     computed: {
       ...mapState({
         goods: state => state.shop.shopDatas.goods
-      })
+      }),
+      navIndex(){
+        let {tops, scrollY} = this
+        let index = tops.findIndex((top, index) => scrollY >= tops[index] && scrollY < tops[index + 1])
+        // this.navIndex !== index 不要在计算属性内部获取计算属性本身的值，死循环 *****
+        if(this.leftScroll && index !== this.index){
+          console.log('滚动了');
+          // scrollToElement滚动到指定的元素
+          this.index = index
+          this.leftScroll.scrollToElement(this.$refs.leftUl.children[index], 1000)
+        }
+        // this.navIndex
+        return index
+      }
     },
     methods: {
       _initScroll(){
-        new BScroll('.leftContainer', {
+        this.leftScroll = new BScroll('.leftContainer', {
           scrollY: true, // 纵向滑动
         })
-        new BScroll('.rightContainer', {
+        this.rightScroll = new BScroll('.rightContainer', {
           scrollY: true, // 纵向滑动
+          // probeType: 1, // 非实时
+          probeType: 2, // 实时, 惯性滑动不计算
+          // probeType: 3, // 实时, 惯性滑动计算
+        })
+
+
+        // 绑定scroll事件
+        this.rightScroll.on('scroll', ({x, y}) => {
+          this.scrollY = Math.abs(y)
+        })
+
+        this.rightScroll.on('scrollEnd', ({x, y}) => {
+          this.scrollY = Math.abs(y)
         })
       },
       // 动态计算所有li高度累加
       _initTops(){
+
         let lis = Array.from(this.$refs.rightUl.children)
         let tops = []
         let top = 0
         tops.push(top)
+        // 方式以： for循环
         // for (var i = 0; i < lis.length; i++) {
         //   top += lis[i].clientHeight;
         //   tops.push(top)
@@ -89,13 +118,14 @@
         //   pre = pre + next
         //   return pre
         // }, 0)
-
+        // reduce filter map push pop
         lis.reduce((pre, liItem) => {
           pre += liItem.clientHeight
           tops.push(pre)
           return pre
         }, top)
 
+        // 只渲染一次，提高性能
         this.tops = tops
       }
     },
@@ -135,6 +165,9 @@
           text-align center
           line-height 50px
           position relative
+          &.active
+            background #ffffff
+            color $green
           &:after
             content: ''
             width 80%
