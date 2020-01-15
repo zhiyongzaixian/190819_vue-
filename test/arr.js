@@ -7,3 +7,17 @@ console.log(arr.findIndex((item, index) => item > 3)); // 返回满足条件的�
 
 // push pop会影响原数组，返回值为数组最新的length
 console.log(arr.push(6));
+
+
+let obj = {
+  username: 'kobe'
+}
+
+
+// let obj2 = obj
+// obj2.username = 'wade'
+// console.log(obj.username);
+
+let obj2 = JSON.parse(JSON.stringify(obj))
+obj2.username = 'wade'
+console.log(obj.username);

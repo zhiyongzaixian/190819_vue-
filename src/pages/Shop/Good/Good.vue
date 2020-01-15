@@ -64,7 +64,7 @@
       }
     },
     async mounted(){
-      console.log('goods', this.goods);
+      // console.log('goods', this.goods);
       if(this.goods){
         this._initScroll()
         this._initTops()
@@ -94,7 +94,7 @@
         let index = tops.findIndex((top, index) => scrollY >= tops[index] && scrollY < tops[index + 1])
         // this.navIndex !== index 不要在计算属性内部获取计算属性本身的值，死循环 *****
         if(this.leftScroll && index !== this.index){
-          console.log('滚动了');
+          // console.log('滚动了');
           // scrollToElement滚动到指定的元素
           this.index = index
           this.leftScroll.scrollToElement(this.$refs.leftUl.children[index], 1000)
@@ -172,7 +172,7 @@
     },
     watch: {
       goods(newValue, oldValue){
-        console.log(newValue, 'xxxx');
+        // console.log(newValue, 'xxxx');
         // this.$nextTick组件下一次渲染完毕
         this.$nextTick(() => {
           this._initScroll()

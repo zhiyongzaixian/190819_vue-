@@ -18,20 +18,51 @@
 
 <script>
   import {mapState} from 'vuex'
+  import {SAVE_SHOPDATAS, SAVE_CARTSHOPS} from '../../store/mutations-type'
   import ShopHeader from '../../components/ShopHeader/ShopHeader'
   export default {
     components: {
       ShopHeader
     },
     async mounted(){
-      // let result = await this.$API.getShopDatas()
-      // console.log(result);
 
-      this.$store.dispatch('getShopDatasAction')
+      // let data = {}
+      // sessionStorage.setItem('xxx', JSON.stringify(data))
+      // 解决Vuex刷新页面数据丢失问题
+
+      // 从sessionStorage读取数据
+      let shopDatas = JSON.parse(sessionStorage.getItem('shopDatas'))
+      if(shopDatas){
+        // 1. 将读取的数据存入Vuex中
+        this.$store.commit(SAVE_SHOPDATAS, shopDatas)
+
+        // 2. 计算最新的购物车数据， food.count > 0
+        let cartShops = shopDatas.goods.reduce((pre, good) => {
+          pre.push(...good.foods.filter(food => food.count))
+          return pre
+        }, [])
+        // 3. cartShops存入Vuex中
+        this.$store.commit(SAVE_CARTSHOPS, cartShops)
+      }else {
+        // 分发action，发请求获取数据
+        this.$store.dispatch('getShopDatasAction')
+      }
+      // unload事件在页面确定刷新，但是还没有真正刷新的时候，     页面即将刷新之前执行
+      window.addEventListener('unload', () =>{
+        // 将最新的shopDatas存入sessionStorage
+        sessionStorage.setItem('shopDatas', JSON.stringify(this.shopDatas))
+      })
+
+    },
+    beforeDestroy(){
+
+      // 将最新的shopDatas存入sessionStorage
+      sessionStorage.setItem('shopDatas', JSON.stringify(this.shopDatas))
     },
     computed: {
       ...mapState({
-        initTest: state => state.shop.initTest
+        initTest: state => state.shop.initTest,
+        shopDatas: state => state.shop.shopDatas
       })
 
       // ...mapState(['shop.initTest'])

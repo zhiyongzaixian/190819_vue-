@@ -3,7 +3,8 @@ import {
   SAVE_SHOPDATAS,
   ADD_FOOD_COUNT,
   DEL_FOOD_COUNT,
-  CLEAR_CARTSHOPS
+  CLEAR_CARTSHOPS,
+  SAVE_CARTSHOPS
 } from '../mutations-type'
 
 import {
@@ -46,6 +47,9 @@ const mutations = {
     state.cartShops.forEach(food => food.count = 0)
     
     state.cartShops = []
+  },
+  [SAVE_CARTSHOPS](state, cartShops){
+    state.cartShops = cartShops
   }
 }
 
