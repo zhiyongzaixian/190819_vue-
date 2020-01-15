@@ -11,7 +11,7 @@
     <div class="rightContainer">
       <div class="foods-wrapper">
         <ul ref="rightUl">
-          <p>{{a.c}}</p>
+          <!--<p>{{a.c}}</p>-->
 
           <li  class="food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
@@ -41,6 +41,7 @@
       </div>
 
     </div>
+    <ShopCart />
   </div>
 </template>
 
@@ -48,9 +49,10 @@
   import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
   import CartControl from '../../../components/CartControl/CartControl'
+  import ShopCart from '../../../components/ShopCart/ShopCart'
   export default {
     components: {
-      CartControl
+      CartControl, ShopCart
     },
     data(){
       return {
@@ -62,6 +64,7 @@
       }
     },
     async mounted(){
+      console.log('goods', this.goods);
       if(this.goods){
         this._initScroll()
         this._initTops()
@@ -102,27 +105,33 @@
     },
     methods: {
       _initScroll(){
-        this.leftScroll = new BScroll('.leftContainer', {
-          scrollY: true, // 纵向滑动
-          click: true, // 允许点击
-        })
-        this.rightScroll = new BScroll('.rightContainer', {
-          scrollY: true, // 纵向滑动
-          // probeType: 1, // 非实时
-          probeType: 2, // 实时, 惯性滑动不计算
-          // probeType: 3, // 实时, 惯性滑动计算
-          click: true, // 允许点击
-        })
+
+        if(this.leftScroll || this.rightScroll){ // 之前生成过BScroll的实例
+          this.leftScroll.refresh() // 重新刷新当前的实例, 重新计算content的高度/宽度
+          this.rightScroll.refresh() // 重新刷新当前的实例
+        }else { // 之前没有生成过，new BScroll
+          this.leftScroll = new BScroll('.leftContainer', {
+            scrollY: true, // 纵向滑动
+            click: true, // 允许点击
+          })
+          this.rightScroll = new BScroll('.rightContainer', {
+            scrollY: true, // 纵向滑动
+            // probeType: 1, // 非实时
+            probeType: 2, // 实时, 惯性滑动不计算
+            // probeType: 3, // 实时, 惯性滑动计算
+            click: true, // 允许点击
+          })
 
 
-        // 绑定scroll事件
-        this.rightScroll.on('scroll', ({x, y}) => {
-          this.scrollY = Math.abs(y)
-        })
+          // 绑定scroll事件
+          this.rightScroll.on('scroll', ({x, y}) => {
+            this.scrollY = Math.abs(y)
+          })
 
-        this.rightScroll.on('scrollEnd', ({x, y}) => {
-          this.scrollY = Math.abs(y)
-        })
+          this.rightScroll.on('scrollEnd', ({x, y}) => {
+            this.scrollY = Math.abs(y)
+          })
+        }
       },
       // 动态计算所有li高度累加
       _initTops(){
@@ -155,8 +164,6 @@
         this.tops = tops
       },
       changeNavIndex(index){
-        console.log('xxxxxx');
-        console.log(event);
         // this.navIndex = index NO setter
         this.scrollY = this.tops[index]
         // 右侧区域滑动到对应的位置
@@ -164,8 +171,8 @@
       }
     },
     watch: {
-      goods(){
-        console.log(this.goods);
+      goods(newValue, oldValue){
+        console.log(newValue, 'xxxx');
         // this.$nextTick组件下一次渲染完毕
         this.$nextTick(() => {
           this._initScroll()
@@ -181,7 +188,7 @@
   #goodContainer
     display flex
     overflow hidden
-    height calc(100vh - 224px)
+    height calc(100vh - 272px)
 
     .leftContainer
       width 80px
