@@ -2,7 +2,8 @@ import Vue from 'vue'
 import {
   SAVE_SHOPDATAS,
   ADD_FOOD_COUNT,
-  DEL_FOOD_COUNT
+  DEL_FOOD_COUNT,
+  CLEAR_CARTSHOPS
 } from '../mutations-type'
 
 import {
@@ -25,9 +26,9 @@ const mutations = {
     // Vuex中同Vue中一样， 有响应式属性和非响应式属性
     if(food.count > 0){
       food.count++
+  
     }else {
       // food.count = 1
-      
       Vue.set(food, 'count', 1)
       state.cartShops.push(food)
     }
@@ -41,6 +42,11 @@ const mutations = {
       }
     }
   },
+  [CLEAR_CARTSHOPS](state){
+    state.cartShops.forEach(food => food.count = 0)
+    
+    state.cartShops = []
+  }
 }
 
 

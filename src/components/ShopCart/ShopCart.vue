@@ -23,20 +23,20 @@
           <div class="shopcart-list" v-show="isShowCart">
             <div class="list-header">
               <h1 class="title">购物车</h1>
-              <span class="empty">清空</span>
+              <span class="empty" @click="clearCart">清空</span>
             </div>
             <div class="list-content">
               <ul>
-                <li class="food">
-                  <span class="name">红枣山药糙米粥</span>
-                  <div class="price"><span>￥10</span></div>
+                <li class="food" v-for="(food, index) in cartShops" :key="index">
+                  <span class="name">{{food.name}}</span>
+                  <div class="price"><span>￥{{food.price}}</span></div>
                   <div class="cartcontrol-wrapper">
                     <!--<div class="cartcontrol">-->
                       <!--<div class="iconfont icon-remove_circle_outline"></div>-->
                       <!--<div class="cart-count">1</div>-->
                       <!--<div class="iconfont icon-add_circle"></div>-->
                     <!--</div>-->
-                    <!--<CartControl />-->
+                    <CartControl :food="food"/>
                   </div>
                 </li>
               </ul>
@@ -44,12 +44,14 @@
           </div>
         </transition>
       </div>
-      <div class="list-mask" style="display: none;"></div>
+      <div class="list-mask" @click="isShowCart = false" v-show="isShowCart"></div>
     </div>
 </template>
 
 <script>
   import {mapGetters, mapState} from 'vuex'
+  import {CLEAR_CARTSHOPS} from '../../store/mutations-type'
+  import {MessageBox} from 'mint-ui'
   import CartControl from '../CartControl/CartControl'
   export default {
     components: {
@@ -64,7 +66,8 @@
       // mapGetters的时候只能用数组的形式
       ...mapGetters(['totalCount', 'totalPrice']),
       ...mapState({
-        info: state => state.shop.shopDatas.info
+        info: state => state.shop.shopDatas.info,
+        cartShops: state => state.shop.cartShops
       }),
       payContent(){
         let {totalPrice, info} = this
@@ -92,6 +95,19 @@
     methods: {
       toggleCartShow(){
         this.totalCount && (this.isShowCart = !this.isShowCart)
+      },
+      // 清空购物车
+      clearCart(){
+        MessageBox.confirm('确认清空吗？')
+          .then(
+            actionAgree => this.$store.commit(CLEAR_CARTSHOPS),
+            actionReject => console.log('取消清空')
+          )
+      }
+    },
+    watch: {
+      cartShops(newValue){
+        !newValue.length && (this.isShowCart = false)
       }
     }
   }
@@ -236,7 +252,7 @@
           .cartcontrol-wrapper
             position: absolute
             right: 0
-            bottom: 6px
+            bottom: 13px
 
   .list-mask
     position: fixed
