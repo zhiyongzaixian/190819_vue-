@@ -25,6 +25,8 @@ const mutations = {
     if(food.count > 0){
       food.count++
     }else {
+      // food.count = 1
+      
       Vue.set(food, 'count', 1)
     }
   },

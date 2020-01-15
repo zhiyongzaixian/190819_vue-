@@ -66,8 +66,12 @@
         this._initScroll()
         this._initTops()
       }
+      // this.a.c = 1
+      // this.$set(this.a, 'c', 1)
+      // console.log(this.a);
 
       // 说明非响应式属性, 组件实例初始化的时候没有当前数据
+      // this.data.count
       // this.count = 1
       // this.a.c = 1
       // this.$set(this.a, 'c', 1)

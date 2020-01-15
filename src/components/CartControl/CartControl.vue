@@ -1,7 +1,9 @@
 <template>
   <div class="cartcontrol">
-    <div class="iconfont icon-jianhao" @click="changeFoodCount(false)"></div>
-    <div class="cart-count">{{food.count}}</div>
+    <transition name='move'>
+      <div class="iconfont icon-jianhao" v-show="food.count" @click="changeFoodCount(false)"></div>
+    </transition>
+    <div class="cart-count" v-show="food.count">{{food.count}}</div>
     <div class="iconfont icon-add" @click="changeFoodCount(true)"></div>
   </div>
 
@@ -30,6 +32,11 @@
     .icon-jianhao
       padding 2px
       color $green
+      &.move-enter-active, &.move-leave-active
+        transition all .5s
+      &.move-enter, &.move-leave-to
+        transform translateX(20px) rotate(180deg)
+        opacity 0
     .cart-count
       display: inline-block
       width: 14px
