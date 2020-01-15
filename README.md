@@ -116,6 +116,9 @@
          2. 刷新页面会重新初始化整个应用，重新分配内存
       2. 解决方案：
          1. 当页面刷新的时候重新发请求获取数据，更新Vuex中的数据
+         2. 利用页面刷新的事件  + sessionStorage
+            1. 在unload事件的回调中将数据保存至sessionStorage中
+            2. 在组件重新加载之后从sessionStorage中读取并更新至Vuex中
 
 # 5. 响应式属性 VS 非响应式属性
 
@@ -130,3 +133,12 @@
  	3. 如何定义一个响应式属性
       	1. Vue.set(target, propertyName, value)
       	2. vm.$set(target, propertyName, value)
+
+# 6. 项目即将上线之前应该做的事情
+
+ 	1. 性能优化1
+      	1. 路由组件懒加载
+      	2. 语法: import(路由组件的相对路径)
+ 	2. 性能优化2
+      	1. 关闭source map文件
+      	2. webpack的配置，在vue3的脚手架里vue.config.js中： productionSourceMap: false, // 不生成 source map文件
