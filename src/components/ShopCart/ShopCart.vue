@@ -4,48 +4,97 @@
         <div class="content2">
           <div class="content-left">
             <div class="logo-wrapper">
-              <div class="logo highlight">
-                <i class="iconfont icon-gouwuche1"></i>
+              <div @click="toggleCartShow" class="logo " :class="{highlight: totalCount}">
+                <i class="iconfont icon-gouwuche1" :class="{highlight: totalCount}"></i>
               </div>
-              <div class="num">1</div>
+              <div class="num" v-show="totalCount">{{totalCount}}</div>
             </div>
-            <div class="price highlight">￥10</div>
-            <div class="desc">另需配送费￥4元</div>
+            <div class="price highlight">￥{{totalPrice}}</div>
+            <div class="desc" v-if="info">另需配送费￥{{info.deliveryPrice}}元</div>
           </div>
           <div class="content-right">
-            <div class="pay not-enough">
-              还差￥10元起送
+            <div class="pay " :class="payClass">
+              {{payContent}}
             </div>
           </div>
         </div>
-        <div class="shopcart-list" style="display: none;">
-          <div class="list-header">
-            <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
-          </div>
-          <div class="list-content">
-            <ul>
-              <li class="food">
-                <span class="name">红枣山药糙米粥</span>
-                <div class="price"><span>￥10</span></div>
-                <div class="cartcontrol-wrapper">
-                  <div class="cartcontrol">
-                    <div class="iconfont icon-remove_circle_outline"></div>
-                    <div class="cart-count">1</div>
-                    <div class="iconfont icon-add_circle"></div>
+
+        <transition name="fade">
+          <div class="shopcart-list" v-show="isShowCart">
+            <div class="list-header">
+              <h1 class="title">购物车</h1>
+              <span class="empty">清空</span>
+            </div>
+            <div class="list-content">
+              <ul>
+                <li class="food">
+                  <span class="name">红枣山药糙米粥</span>
+                  <div class="price"><span>￥10</span></div>
+                  <div class="cartcontrol-wrapper">
+                    <!--<div class="cartcontrol">-->
+                      <!--<div class="iconfont icon-remove_circle_outline"></div>-->
+                      <!--<div class="cart-count">1</div>-->
+                      <!--<div class="iconfont icon-add_circle"></div>-->
+                    <!--</div>-->
+                    <!--<CartControl />-->
                   </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
       <div class="list-mask" style="display: none;"></div>
     </div>
 </template>
 
 <script>
-  export default {}
+  import {mapGetters, mapState} from 'vuex'
+  import CartControl from '../CartControl/CartControl'
+  export default {
+    components: {
+      CartControl
+    },
+    data(){
+      return {
+        isShowCart: false
+      }
+    },
+    computed: {
+      // mapGetters的时候只能用数组的形式
+      ...mapGetters(['totalCount', 'totalPrice']),
+      ...mapState({
+        info: state => state.shop.shopDatas.info
+      }),
+      payContent(){
+        let {totalPrice, info} = this
+        if(!info){
+          return
+        }
+        let text
+        if(totalPrice === 0){
+          text = `${info.minPrice}元起送`
+        }else if(totalPrice > 0 && totalPrice < info.minPrice){
+          text = `差${info.minPrice - totalPrice}元配送`
+        }else {
+          text = '去结算'
+        }
+        return text
+      },
+      payClass(){
+        let {totalPrice, info} = this
+        if(!info){
+          return
+        }
+        return totalPrice - info.minPrice >= 0?'enough' : 'not-enough'
+      }
+    },
+    methods: {
+      toggleCartShow(){
+        this.totalCount && (this.isShowCart = !this.isShowCart)
+      }
+    }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
@@ -142,6 +191,11 @@
       top: 0
       z-index: -1
       width: 100%
+      transform translateY(-100%)
+      &.fade-enter-active, &.fade-leave-active
+        transition all .5s
+      &.fade-enter, &.fade-leave-to
+        transform translateY(0)
       .list-header
         height: 40px
         line-height: 40px
