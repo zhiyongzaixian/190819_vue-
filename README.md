@@ -142,3 +142,38 @@
  	2. 性能优化2
       	1. 关闭source map文件
       	2. webpack的配置，在vue3的脚手架里vue.config.js中： productionSourceMap: false, // 不生成 source map文件
+
+
+
+# 7. 动态组件 & 异步组件 
+
+ 	1. 动态组件
+      	1. 使用的时候动态加载，用于提高性能
+      	2. 语法： <component :is='动态组件名称' />
+ 	2. 异步组件
+      	1. 常规注册组件： components: {组件名： 组件}
+      	2. 异步注册组件: components: {组件名： function(resolve, reject){// 异步任务成功(获取异步组件)， resolve(异步组件)}}
+
+# 8. 组件性能优化
+
+1. 路由组件懒加载： import函数
+
+   1. 语法: const 组件名 = () => import('组件路径')
+   2. 作用： 将组件分割成不同的模块，使用的时候按需加载
+
+2. 缓存组件
+
+   1. 语法： keep-alive
+
+   2. 作用： 
+
+      1. 不使用的组件没有销毁，被keep-alive缓存起来
+      2. 再一次加载缓存的组件不需要重新创建，mounted不会再执行
+
+   3. 特点：
+
+      1. actived： 组件被使用(被激活)
+
+      2. deactived: 组件被缓存(没有使用的时候)
+
+         

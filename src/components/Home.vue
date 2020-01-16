@@ -10,7 +10,17 @@
 
 <script>
   export default {
+    mounted(){
+      console.log('home mounted');
 
+    },
+    activated(){
+      console.log('home activated');
+      // 发送请求获取数据
+    },
+    deactivated(){
+      console.log('home deactivated');
+    }
   }
 </script>
 

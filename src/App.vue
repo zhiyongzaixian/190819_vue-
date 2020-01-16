@@ -6,7 +6,9 @@
       <div class="tab-item" @click="comName = 'Home'">Home组件</div>
       <div class="tab-item" @click="comName = 'Msite'">Msite组件</div>
     </div>
-    <component :is="comName"></component>
+    <keep-alive>
+      <component :is="comName"></component>
+    </keep-alive>
     <!--<Home />-->
     <!--<Msite />-->
   </div>
@@ -39,6 +41,11 @@
   #appContainer
     .tabs
       display flex
+      position fixed
+      top 0
+      left 0
+      width 100%
+      background yellowgreen
       .tab-item
         border 1px solid #999
         height 80px
