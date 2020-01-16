@@ -1,27 +1,14 @@
 <template>
   <div>
-    <br>
-    <br>
-    <br>
-    <h2>Home 组件</h2>
-    <hr>
+    <h2>Home组件</h2>
+    <button @click="$emit('click', 123)">触发Home组件的自定义事件</button>
   </div>
 </template>
 
 <script>
-  export default {
-    mounted(){
-      console.log('home mounted');
 
-    },
-    activated(){
-      console.log('home activated');
-      // 发送请求获取数据
-    },
-    deactivated(){
-      console.log('home deactivated');
-    }
-  }
+
+  export default {}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
