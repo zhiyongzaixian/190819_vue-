@@ -1,22 +1,32 @@
 <template>
   <div id="appContainer">
-    <router-view></router-view>
-    <FooterGuide v-show="$route.meta.isShowFooter"/>
+    <h1>App 组件</h1>
+    <Home >
+      <!--<p slot="left">Home的左护法</p>-->
+      <!--<p slot="right">Home的右护法</p>-->
+
+      <template v-slot:left>
+        <p >{{msg}}Home的左护法</p>
+      </template>
+      <template v-slot:right="rightProps">
+        <p>{{rightProps.person.lastName}}Home的右护法</p>
+      </template>
+    </Home>
   </div>
 </template>
 
 <script>
-  import {SAVE_USER} from './store/mutations-type'
-import FooterGuide from './components/FooterGuide/FooterGuide'
-export default {
-  name: 'app',
-  components: {FooterGuide},
-  async mounted(){
-    let result = await this.$API.autoLogin()
-    // 存入至Vuex中
-    this.$store.commit(SAVE_USER, result.data)
+  import Home from './components/Home'
+  export default {
+    components: {
+      Home
+    },
+    data(){
+      return {
+        msg: 'App组件的数据'
+      }
+    }
   }
-}
 </script>
 
 <style lang="stylus">

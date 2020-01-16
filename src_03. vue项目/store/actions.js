@@ -26,7 +26,7 @@ export default {
   },
   async getCategorysAction({commit}, fn){
     let result = await getCategorys()
-    if(!!(result.code === 0)){
+    if(result.code === 0){
       commit(SAVE_CATEGORYS, result.data)
       typeof fn === 'function' && fn()
     }

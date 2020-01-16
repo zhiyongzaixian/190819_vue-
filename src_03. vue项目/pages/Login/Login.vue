@@ -61,13 +61,18 @@
               </section>
             </section>
           </div>
-          <button class="login_submit" @click.prevent="login">登录</button>
+          <button class="login_submit" @click.prevent="login">{{$t('login')}}</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
       <a href="javascript:" class="go_back">
         <i class="iconfont icon-jiantouzuo"></i>
       </a>
+    </div>
+    <div class="languageContainer">
+      <mt-button type="primary" @click="toggleLanguage('Chinese')">中文</mt-button>
+      <mt-button type="primary" @click="toggleLanguage('English')">英文</mt-button>
+      <mt-button type="primary" @click="toggleLanguage('Japanese')">日文</mt-button>
     </div>
   </section>
 </template>
@@ -151,12 +156,19 @@
           alert('前端验证失败')
         }
 
+      },
+      toggleLanguage(language){
+        this.$i18n.locale = language
+
       }
     },
     computed: {
       rightPhoneNumber(){
         return /^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone)
       }
+    },
+    mounted(){
+      this.$i18n.locale = 'Chinese'
     }
   }
 </script>
@@ -299,4 +311,8 @@
           font-size 20px
           color #999
 
+    .languageContainer
+      display flex
+      margin-top 50px
+      justify-content space-around
 </style>
