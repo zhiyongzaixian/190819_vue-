@@ -14,7 +14,7 @@
     "better-scroll": "^1.15.2",
     "core-js": "^3.4.4",
     "lib-flexible": "^0.3.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mint-ui": "^2.2.13",
     "mockjs": "^1.1.0",
     "postcss-px2rem": "^0.3.0",
