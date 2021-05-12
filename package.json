@@ -20,7 +20,7 @@
     "postcss-px2rem": "^0.3.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
-    "swiper": "^5.2.1",
+    "swiper": "^6.5.1",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.10",
     "vue-i18n": "^8.0.0",
